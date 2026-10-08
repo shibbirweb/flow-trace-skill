@@ -1,0 +1,59 @@
+{
+  "skill_name": "flow-trace",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "visualize how a scheduled email digest gets sent in this app. start from the cron/scheduler entry and go all the way to the mail provider. i want to step through it file by file with the code",
+      "expected_output": "A step-through page tracing the schedule line, the command, the selection query, the fan-out job, the per-recipient job and the mail transport, each step quoting real code with file, method, line, highlighted lines, a note and load pills; the chat reply lists phases, step count and anything surprising found.",
+      "files": [],
+      "expectations": [
+        "trace.html exists, is a self-contained page whose inline scripts parse (node --check) and loads scripts only from allowed CDNs",
+        "The page has Back and Forward controls plus ArrowLeft/ArrowRight keyboard navigation to move through steps",
+        "At least 10 distinct real repo files are referenced and every referenced file path exists on disk",
+        "Code snippets are verbatim: at least 80% of sampled non-trivial code lines (30+ chars) are found verbatim in the repo",
+        "The trace has between 15 and 45 steps",
+        "Every step names the executing method and highlights the executing lines within the snippet",
+        "Steps that run inside a loop (per recipient, per row) are labelled as repeating and state the per-iteration cost",
+        "The chat reply reports at least one concrete cost or risk finding tied to a specific file (sync external call, N+1, missing guard, queue setting, timeout)",
+        "No em-dash character appears in trace.html or the chat reply",
+        "Covers the whole chain from the scheduler entry through the queued jobs to the external mail call"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "make an animated walkthrough of what happens when a visitor submits the public contact form: which files run in what order from the browser to the database and the notification. forward and back buttons please",
+      "expected_output": "A page with lanes for the browser, the HTTP layer, services, queue and external systems; the route and its middleware, validation, controller, service, persistence and the notification job; real code per step; risky hops flagged.",
+      "files": [],
+      "expectations": [
+        "trace.html exists, is a self-contained page whose inline scripts parse (node --check) and loads scripts only from allowed CDNs",
+        "The page has Back and Forward controls plus ArrowLeft/ArrowRight keyboard navigation to move through steps",
+        "At least 10 distinct real repo files are referenced and every referenced file path exists on disk",
+        "Code snippets are verbatim: at least 80% of sampled non-trivial code lines (30+ chars) are found verbatim in the repo",
+        "The trace has between 15 and 45 steps",
+        "Every step names the executing method and highlights the executing lines within the snippet",
+        "The route definition and its middleware or guard are shown as their own step",
+        "The chat reply reports at least one concrete cost or risk finding tied to a specific file",
+        "No em-dash character appears in trace.html or the chat reply",
+        "The last step of each phase returns to the browser or the terminal side effect so the loop closes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "how does login work end to end in the frontend and the API? trace it like a sequence diagram I can click through, with the actual code at each hop",
+      "expected_output": "A page tracing the login form, the API client call, the interceptor, the auth route, validation, the auth service, token issuance and storage, and the first authenticated request; code quoted from the repos; validator passes with --root.",
+      "files": [],
+      "expectations": [
+        "trace.html exists, is a self-contained page whose inline scripts parse (node --check) and loads scripts only from allowed CDNs",
+        "The page has Back and Forward controls plus ArrowLeft/ArrowRight keyboard navigation to move through steps",
+        "At least 10 distinct real repo files are referenced and every referenced file path exists on disk",
+        "Code snippets are verbatim: at least 80% of sampled non-trivial code lines (30+ chars) are found verbatim in the repo",
+        "The trace has between 15 and 45 steps",
+        "Every step names the executing method and highlights the executing lines within the snippet",
+        "Token issuance and token storage on the client are each shown as a step",
+        "The chat reply reports at least one concrete cost or risk finding tied to a specific file",
+        "No em-dash character appears in trace.html or the chat reply",
+        "Covers the login form, the API client, the auth route, the auth service and the first authenticated request"
+      ]
+    }
+  ]
+}

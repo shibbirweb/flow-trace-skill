@@ -1,0 +1,29 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build the smoke page from the template
+        run: node tests/build-smoke.js
+      - name: Validator passes on the smoke page
+        run: node scripts/validate_trace.js tests/out/smoke-trace.html
+      - name: Validator fails on the unfilled template
+        run: |
+          if node scripts/validate_trace.js assets/trace-template.html; then
+            echo "validator should fail on the unfilled template" && exit 1
+          fi
+      - name: No em-dash characters
+        run: |
+          if grep -rl $'\xe2\x80\x94' --exclude-dir=.git --exclude-dir=tests . ; then
+            echo "em-dash found" && exit 1
+          fi
