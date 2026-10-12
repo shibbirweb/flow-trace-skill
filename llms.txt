@@ -1,13 +1,13 @@
 # flow-trace
 
-> A Claude Code skill that turns "how does this request work?" into an interactive, animated, step-through HTML page: one hop per file, the real code with the executing lines highlighted, a plain-language note and cost or risk tags per step, with Back, Forward, Play, a scrubber and phase chips.
+> An Agent Skill for any AI coding agent that turns "how does this request work?" into an interactive, animated, step-through HTML page: one hop per file, the real code with the executing lines highlighted, a plain-language note and cost or risk tags per step, with Back, Forward, Play, a scrubber and phase chips.
 
-The repository root is the skill (Agent Skills format: SKILL.md with name and description frontmatter plus assets, scripts and references). Install by placing a copy of the folder, named flow-trace, in the harness's skills directory.
+The repository root is the skill, in the open Agent Skills format (SKILL.md with name and description frontmatter plus assets, scripts and references), so it works in Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, OpenCode and other agents that support the format. Install by placing a copy of the folder, named flow-trace, in the skills folder your agent reads: .agents/skills/ for most agents, .claude/skills/ for Claude Code. INSTALL.md lists the folder for each agent.
 
 ## Start here
 
-- [INSTALL.md](INSTALL.md): step-by-step install, verification and uninstall instructions written for an AI agent to execute
-- [SKILL.md](SKILL.md): the instructions the agent follows to build a trace
+- [INSTALL.md](INSTALL.md): step-by-step install, verification and uninstall instructions written for an AI agent to execute, starting with working out which agent it is and asking for the install scope
+- [SKILL.md](SKILL.md): the instructions the agent follows to build a trace, with a table of what to do when a capability is missing
 - [README.md](README.md): what the output looks like, how it works, project presets
 
 ## Reference
@@ -15,5 +15,5 @@ The repository root is the skill (Agent Skills format: SKILL.md with name and de
 - [references/lane-presets.md](references/lane-presets.md): lane sets and hop orders for common stacks
 - [assets/trace-template.html](assets/trace-template.html): the page template; only the data block is filled per trace
 - [scripts/validate_trace.js](scripts/validate_trace.js): pre-publish checks, supports --root to verify file paths exist
-- [CLAUDE.md](CLAUDE.md): rules for changing this repository
+- [AGENTS.md](AGENTS.md): rules for changing this repository
 - [LICENSE](LICENSE): MIT

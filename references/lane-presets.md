@@ -2,7 +2,7 @@
 
 Lanes are the diagram columns, left to right in call direction. Pick the preset closest to the stack, drop any lane the flow never touches, and rename labels to what the team calls each layer. Colors are assigned by column position, so lane ids can be anything short.
 
-Before using a preset, look for a project-specific one: a file named `flow-trace-presets.md` anywhere in the repo, or a "flow-trace" section in the project's CLAUDE.md or README. Teams keep their own hop orders there (which interceptor to show, which base job class every queue job extends, where the route table lives). When one exists it wins over this file.
+Before using a preset, look for a project-specific one: a file named `flow-trace-presets.md` anywhere in the repo, or a "flow-trace" section in the project's agent instructions file (AGENTS.md, CLAUDE.md, GEMINI.md or similar) or README. Teams keep their own hop orders there (which interceptor to show, which base job class every queue job extends, where the route table lives). When one exists it wins over this file.
 
 ## Browser SPA calling a backend API (Vue, React, Angular, Svelte with Laravel, Rails, Django, Express, Nest, Spring)
 

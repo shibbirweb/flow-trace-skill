@@ -1,6 +1,8 @@
 ---
 name: flow-trace
-description: Build an interactive, animated, step-through visualization of how a request, feature, job or process moves through a codebase file by file, with the real code and method at every hop, as a single HTML page with forward/back/play controls (published as an Artifact when that tool exists, otherwise saved as a file). Use this whenever the user asks to visualize, trace, walk through, animate, or diagram how something works end to end in code (a request, an API call, a button click, a queue job, a scheduler command, a webhook, a login flow, an import), asks "how does X flow" or "what happens when", wants a sequence or flow diagram they can click through, or wants to show teammates the path a request takes. Reach for it even when the user does not say "diagram" or "artifact" but wants to see the code path across files rather than a prose explanation.
+description: Build an interactive, animated, step-through visualization of how a request, feature, job or process moves through a codebase file by file, with the real code and method at every hop, as a single HTML page with forward/back/play controls (published through the agent's page or artifact tool when it has one, otherwise saved as a file). Use this whenever the user asks to visualize, trace, walk through, animate, or diagram how something works end to end in code (a request, an API call, a button click, a queue job, a scheduler command, a webhook, a login flow, an import), asks "how does X flow" or "what happens when", wants a sequence or flow diagram they can click through, or wants to show teammates the path a request takes. Reach for it even when the user does not say "diagram" or "page" but wants to see the code path across files rather than a prose explanation.
+license: MIT
+compatibility: Requires Node 18 or newer to validate the page. Works with any agent that supports Agent Skills.
 ---
 
 # Flow trace
@@ -8,6 +10,22 @@ description: Build an interactive, animated, step-through visualization of how a
 Produce a page where a reader steps through one flow hop by hop. Each step names the layer, file, method and line, shows the actual code with the executing lines highlighted, explains in plain words what happens, and tags the cost or risk of the hop. A lane diagram animates the hop from the previous file to the current one. The reader moves with Back and Forward buttons, Play, a scrubber, phase chips, a step list, and arrow keys.
 
 The value is in the accuracy of the code and the honesty of the notes, not in the animation. People use these pages to understand load, find the hop that breaks, and brief teammates. A paraphrased snippet or an invented line number destroys that trust, so every step is quoted from the repo as it is today.
+
+## Fit this skill to your environment
+
+This skill works in any agent that supports Agent Skills. It names what it needs, never a specific tool, so check what you have once at the start and follow the matching column. Mention a missing capability to the person only when it changes what they get.
+
+| The skill needs | When you have it | When you do not |
+|---|---|---|
+| Shell commands (`node`, `grep`) | Run the validator yourself and search the code with grep. | Give the person the validator command and ask for the output. Never say a page was validated when you did not run it. |
+| Node 18 or newer | Confirm with `node --version`. | Check the page by hand against the quality bar below, and say clearly in your reply that it was not validated. |
+| Reading files in the repository | Read the code directly. | Ask the person to share the files. Do not write snippets or line numbers from memory. |
+| Asking a question and waiting for the answer | Ask one short question when two readings of the flow would produce different pages. | Take the most likely reading and state the assumption at the top of your reply. |
+| A scratch or temp folder | Fill the template there. | Use `docs/trace/<slug>.html` in the repository and say so. |
+| A tool that publishes or hosts an HTML page (an artifact, canvas or share tool) | Publish the page with a one-sentence description, and the icon "diagram" if the tool asks for one. | Save the HTML file and give its path. |
+| A browser or preview pane | Open the page and check that it renders. | Tell the person to open the file in any browser. It works offline. |
+
+`<skill dir>` in the commands below is the folder that holds this `SKILL.md`, wherever your agent installed it (for example `.agents/skills/flow-trace` or `.claude/skills/flow-trace`). Resolve it once and use the full path.
 
 ## Workflow
 
@@ -21,7 +39,7 @@ Decide the phases now. A phase is a user-visible stage (Import, Compare, Replace
 
 ### 2. Pick lanes and nodes
 
-Read `references/lane-presets.md` for lane sets and the typical hop order for common stacks. Check first whether the project keeps its own presets (a `flow-trace-presets.md` file or a flow-trace section in its CLAUDE.md or README); a project file wins. Lanes are columns ordered in call direction. Nodes are files or external systems, never methods: one file node appears in as many steps as it has methods on the path.
+Read `references/lane-presets.md` for lane sets and the typical hop order for common stacks. Check first whether the project keeps its own presets (a `flow-trace-presets.md` file, or a flow-trace section in its agent instructions file such as AGENTS.md, CLAUDE.md or GEMINI.md, or in its README); a project file wins. Lanes are columns ordered in call direction. Nodes are files or external systems, never methods: one file node appears in as many steps as it has methods on the path.
 
 ### 3. Collect the real code for every hop
 
@@ -41,7 +59,7 @@ Include the plumbing hops the first time they appear in a trace (HTTP intercepto
 
 ### 4. Fill the template
 
-Copy `assets/trace-template.html` to a working folder as `<slug>-trace.html`. Replace:
+Copy `assets/trace-template.html` to a working folder (a scratch or temp folder) as `<slug>-trace.html`. Replace:
 
 - `__TITLE__` (twice): a two to four word name such as "Checkout Request Trace"
 - `__INTRO__`: one sentence saying what flow this is and the date the code was read
@@ -80,7 +98,7 @@ node <skill dir>/scripts/validate_trace.js <path>/<slug>-trace.html --root <repo
 
 Fix every FAIL line. Then deliver the page:
 
-- When an Artifact tool is available, call its quickstart once (intent "other") and publish the file with icon "diagram" and a one-sentence description. Republish to the same path when the user asks for changes.
+- When the agent has a tool that publishes or hosts an HTML page (for example an artifact, canvas or share tool), follow any setup that tool asks for, then publish the file with a one-sentence description; if the tool asks for an icon, use "diagram". Republish to the same place when the user asks for changes.
 - Otherwise save the file where the user can open it (for example `docs/trace/<slug>.html` in the repo) and open it in a browser preview if one exists. The page is self-contained and works from a local file.
 
 ### 6. Report
